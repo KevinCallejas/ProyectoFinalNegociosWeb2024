@@ -1,6 +1,4 @@
-{{if ~isADMIN}}
-{{ifnot isEmpty}}
-<section><h2 class="text-2xl font-bold mb-4"> LISTADO DE USUARIO</h2>
+<section><h2 class="text-2xl font-bold mb-4 mx-4"> USUARIO</h2>
 <div class="overflow-x-auto">
 <table class="min-w-full bg-white border border-gray-300 mx-6">
 <thead class="text-center justify-center mx-2">
@@ -25,5 +23,20 @@
 	</tr>
  {{endfor usuario}}</tbody>
 </table>
-</div> </section>{{endifnot isEmpty}}{{if isEmpty}}
-{{include components/tarjeta}}{{endif isEmpty}}{{endif ~isADMIN}}
+</div> </section>
+
+<style>
+table {
+    max-width: 100%;
+    overflow: hidden; 
+    width: 100%; /* Ocupa el ancho completo de su contenedor */
+}
+
+table thead {
+    width: 300px; /* Ancho específico para el encabezado si lo deseas */
+}
+td {
+	width:300px;
+    word-wrap: break-word; /* Permitir que el texto se envuelva automáticamente */
+}
+</style>

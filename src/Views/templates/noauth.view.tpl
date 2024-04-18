@@ -1,24 +1,32 @@
-<section class="bg-gray-200 mx-auto shadow-lg p-8 max-w-md" style="animation: discoBackground 5s ease infinite;">
-    <div class="flex items-center">
-      <div class="flex flex-col items-center px-4 w-full">
-        <h2 class="text-white text-center text-3xl mb-4">So sorry. You are not able to access this</h2>
-        <p class="text-pink-300 text-center text-2xl mb-4">It is going to be alright</p>
-      </div>
-      <div class="w-full text-right mx-2">
-        <img src="https://gifdb.com/images/high/freaked-out-sad-cat-sobbing-x81xcmvrn4yyk9j9.gif" alt="GIF" class="max-w-full h-auto">
-      </div>
-    </div>
-  </section>
-  <style>
-    @keyframes discoBackground {
-        0% {
-          background-color: #3498db; 
-        }
-        50% {
-          background-color: #9b59b6; 
-        }
-        100% {
-          background-color: #3498db;
-        }
-      }
+<section class="noauth">
+<h2>Hubo un problema</h2>
+<p>Lamentamos lo anterior, parece que no tienes los permisos necesarios para continuar</p>
+<a href="index.php?page=Inicio_Inicio">Regresar a Inicio </a>
+</section>
+
+
+<style>
+body
+{
+  height: 100vh;
+}
+  .noauth {
+   
+    padding: 2rem; 
+    margin: 10rem auto; 
+    max-width: 600px; 
+  }
+
+  /* Estilos para el título */
+  .noauth h2 {
+    margin-top: 0; /* Elimina el margen superior */
+   font-size: 2rem; 
+  }
+
+
+  /* Estilos para el enlace al pasar el cursor */
+  .noauth a:hover {
+    color: #5a121b; /* Color del enlace al pasar el cursor */
+  }
+</style>
 </style>

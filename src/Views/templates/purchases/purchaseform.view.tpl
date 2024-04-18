@@ -20,6 +20,10 @@
                 <input type="text" id="details" name="details" placeholder="details de purchase " value="{{details}}" {{if ~readonly}} readonly {{endif ~readonly}} class="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:border-blue-400"/>
                 {{if details_error}}<div class="text-red-500 text-sm">{{details_error}}</div>{{endif details_error}}
             </section><section class="mb-4">
+                <label for="usercod" class="block text-gray-700 text-sm font-bold mb-2">usercod</label>
+                <input type="text" id="usercod" name="usercod" placeholder="usercod de purchase " value="{{usercod}}" {{if ~readonly}} readonly {{endif ~readonly}} class="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:border-blue-400"/>
+                {{if usercod_error}}<div class="text-red-500 text-sm">{{usercod_error}}</div>{{endif usercod_error}}
+            </section><section class="mb-4">
                 <label for="payments" class="block text-gray-700 text-sm font-bold mb-2">payments</label>
                 <input type="text" id="payments" name="payments" placeholder="payments de purchase " value="{{payments}}" {{if ~readonly}} readonly {{endif ~readonly}} class="w-full py-2 px-3 border border-gray-300 rounded focus:outline-none focus:border-blue-400"/>
                 {{if payments_error}}<div class="text-red-500 text-sm">{{payments_error}}</div>{{endif payments_error}}

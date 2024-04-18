@@ -1,212 +1,169 @@
 <?php
-/**
-
- * PHP version 8.2.4
- *
- * @Date 22/08/23
- * @Last Update 20/2/24
- * Updated by Skuul2candly
- * Issue Number : 23
- * Ticket Number : 23
- * Changes Approved on 20/2/24
- * Tested by Skullcanldy
- * Description: 
-	This is the first documentation commit
- * Disclosure Agreement: 
-	Keep this information in secret
- * Last changes done: 
-	Documentation Added
-	
- * @author     SkullCanldy
- * @link       https://www.php.net/docs.php
- */
-/*Este archivo PHP define una clase llamada Purchasedetails dentro del espacio de nombres Controllers\Purchasedetails. Aquí está un resumen de lo que hace esta clase:
-
-Espacio de nombres (namespace): La clase está dentro del espacio de nombres Controllers\Purchasedetails, lo que sugiere que esta clase se encarga de la lógica relacionada con los detalles de las compras.
-
-Uso de clases y namespaces: La clase utiliza clases y namespaces como Controllers\PrivateController, Views\Renderer, Dao\Purchasedetails\Purchasedetails, Utilities\Site y Utilities\Validators.
-
-Propiedades privadas: La clase tiene varias propiedades privadas que representan los datos relacionados con los detalles de una compra, como el ID de compra (id_purchase), el ID del artículo de referencia (id_item_reference), la cantidad (quantity) y el precio unitario (unitary_price).
-
-Inicialización y renderización de la vista: El método run() se encarga de inicializar la clase, procesar los datos del formulario si se ha enviado, preparar los datos para la vista y luego renderizar la vista correspondiente.
-
-Validación de datos del formulario: La clase valida los datos del formulario para asegurarse de que los campos requeridos no estén vacíos.
-
-Procesamiento de acciones: La clase procesa las acciones como insertar (INS), actualizar (UPD) y eliminar (DEL) los detalles de la compra en función del modo actual.
-
-Preparación de datos para la vista: La clase prepara los datos necesarios para renderizar la vista, incluyendo el modo actual, los detalles de la compra, los mensajes de error, etc.
-
-Renderización de la vista: Finalmente, la clase renderiza la vista correspondiente utilizando el renderizador de vistas proporcionado. */
+  
 namespace Controllers\Purchasedetails;
-
-use Controllers\PrivateController;
 use Controllers\PublicController;
 use Views\Renderer;
 use Dao\Purchasedetails\Purchasedetails as DAOPurchasedetail;
 use Utilities\Site;
 use Utilities\Validators;
-
-class Purchasedetails extends PrivateController
-{
-    private $id_purchase;
-    private $id_item_reference;
-    private $quantity;
-    private $unitary_price;
-    private $purchasedetail = [
-        "id_purchase" => "",
-        "id_item_reference" => "",
-        "quantity" => "",
-        "unitary_price" => ""
-    ];
-    private $listUrl = "index.php?page=Purchasedetails_Purchasedetail";
-    private $mode = 'INS';
+class Purchasedetails extends PublicController {
+  private $id_purchase;
+  private $id_item_reference;
+  private $quantity;
+  private $unitary_price;
+  private $purchasedetail = [
+	"id_purchase" => "", 
+		"id_item_reference" => "", 
+		"quantity" => "", 
+		"unitary_price" => ""
+];
+	 private $listUrl = "index.php?page=Purchasedetails_Purchasedetail";
+	 private $mode = 'INS';
     private $viewData = [];
     private $error = [];
     private $xss_token_purchasedetail = '';
-    private $modes = [
-        "INS" => "Creando nueva purchasedetail",
-        "UPD" => "Editando purchasedetail",
-        "DEL" => "Eliminando purchasedetail",
-        "DSP" => "Detalle purchasedetail"
-    ];
+private $modes = [
+            "INS" => "Creando nueva purchasedetail",
+            "UPD" => "Editando purchasedetail",
+            "DEL" => "Eliminando purchasedetail",
+            "DSP" => "Detalle purchasedetail"
+        ];
 
-    public function run(): void
-    {
-        $this->init();
-        if ($this->isPostBack()) {
-            if ($this->validateFormData()) {
-                $this->purchasedetail['id_purchase'] = $_POST['id_purchase'];
-                $this->purchasedetail['id_item_reference'] = $_POST['id_item_reference'];
-                $this->purchasedetail['quantity'] = $_POST['quantity'];
-                $this->purchasedetail['unitary_price'] = $_POST['unitary_price'];
-                $this->processAction();
-            }
+        public function run(): void
+        {
+            $this->init();
+             if ($this->isPostBack()){
+                 if($this->validateFormData()){
+						     $this->purchasedetail['id_purchase'] = $_POST['id_purchase'];
+						     $this->purchasedetail['id_item_reference'] = $_POST['id_item_reference'];
+						     $this->purchasedetail['quantity'] = $_POST['quantity'];
+						     $this->purchasedetail['unitary_price'] = $_POST['unitary_price'];
+			      $this->processAction();
+           }
         }
         $this->prepareViewData();
         $this->render();
-    }
-    private function init()
-    {
-        if (isset($_GET["mode"])) {
-            if (isset($this->modes[$_GET["mode"]])) {
-                $this->mode = $_GET["mode"];
-                if ($this->mode !== "INS") {
-                    if (isset($_GET["id_purchase"])) {
-                        $this->purchasedetail = DAOPurchasedetail::obtenerPorId(strval($_GET["id_purchase"]));
+        }
+		private function init()
+        {
+            if (isset($_GET["mode"])) {
+                if (isset($this->modes[$_GET["mode"]])) {
+                    $this->mode = $_GET["mode"];
+                    if($this->mode !== "INS") {
+                        if (isset($_GET["id_purchase"])){
+                            $this->purchasedetail = DAOPurchasedetail::obtenerPorId(strval($_GET["id_purchase"]));
+                            
+                        }
                     }
+                } else {
+                    $this->handleError("Oops, el programa no encuentra el modo solicitado, intente de nuevo");
                 }
             } else {
-                $this->handleError("Oops, el programa no encuentra el modo solicitado, intente de nuevo");
+                $this->handleError("Oops, el programa falló, intente de nuevo.");
             }
-        } else {
-            $this->handleError("Oops, el programa falló, intente de nuevo.");
         }
-    }
-    private function handleError($errMsg)
-    {
-        Site::redirectToWithMsg($this->listUrl, $errMsg);
-    }
+		private function handleError($errMsg){
+            Site::redirectToWithMsg($this->listUrl, $errMsg);
+        }
 
-    private function validateFormData()
-    {
-        if (isset($_POST["xss_token_purchasedetail"])) {
+		private function validateFormData(){
+        if(isset($_POST["xss_token_purchasedetail"])) {
             $this->xss_token_purchasedetail = $_POST["xss_token_purchasedetail"];
-            if ($_SESSION["xss_token_purchasedetail"] !== $this->xss_token_purchasedetail) {
+            if( $_SESSION["xss_token_purchasedetail"] !== $this->xss_token_purchasedetail) {
                 $this->handleError("Error al procesar la peticion");
                 return false;
             }
         } else {
             $this->handleError("Error al procesar la peticion");
             return false;
-        }
-        if (Validators::IsEmpty($_POST["id_purchase"])) {
-            $this->error["id_purchase_error"] = "Campo es requerido";
-        }
-        if (Validators::IsEmpty($_POST["id_item_reference"])) {
-            $this->error["id_item_reference_error"] = "Campo es requerido";
-        }
-        if (Validators::IsEmpty($_POST["quantity"])) {
-            $this->error["quantity_error"] = "Campo es requerido";
-        }
-        if (Validators::IsEmpty($_POST["unitary_price"])) {
-            $this->error["unitary_price_error"] = "Campo es requerido";
-        }
+        }if(Validators::IsEmpty($_POST["id_purchase"])){
+                 $this->error["id_purchase_error"] = "Campo es requerido";
+                }if(Validators::IsEmpty($_POST["id_item_reference"])){
+                 $this->error["id_item_reference_error"] = "Campo es requerido";
+                }if(Validators::IsEmpty($_POST["quantity"])){
+                 $this->error["quantity_error"] = "Campo es requerido";
+                }if(Validators::IsEmpty($_POST["unitary_price"])){
+                 $this->error["unitary_price_error"] = "Campo es requerido";
+                }
         //if (!in_array($_POST["status"], ["INA", "ACT"])) {
-        // $this->error["status_error"] = "Estado es inválido.";
-        // } else {
-        //  $this->error["status_error"] = ""; 
+           // $this->error["status_error"] = "Estado es inválido.";
+       // } else {
+          //  $this->error["status_error"] = ""; 
         //}
-
+        
         return count($this->error) == 0;
     }
 
-    private function processAction()
-    {
+	private function processAction(){
         switch ($this->mode) {
             case 'INS':
-                if (DAOPurchasedetail::insertPurchasedetail(
-                    $this->purchasedetail["id_purchase"],
-                    $this->purchasedetail["id_item_reference"],
-                    $this->purchasedetail["quantity"],
-                    $this->purchasedetail["unitary_price"]
-                )) {
+               if ( DAOPurchasedetail::insertPurchasedetail(
+                       $this -> purchasedetail["id_purchase"],
+$this -> purchasedetail["id_item_reference"],
+$this -> purchasedetail["quantity"],
+$this -> purchasedetail["unitary_price"]
+                    )
+                ) {
                     Site::redirectToWithMsg($this->listUrl, "Purchasedetail creada exitosamente.");
-                } else {
+                } else
+                {
                     Site::redirectToWithMsg($this->listUrl, "Hubo un error.");
                 }
                 break;
             case 'UPD':
-                if (DAOPurchasedetail::updatePurchasedetail(
-                    $this->purchasedetail["id_purchase"],
-                    $this->purchasedetail["id_item_reference"],
-                    $this->purchasedetail["quantity"],
-                    $this->purchasedetail["unitary_price"]
-                )) {
+                if ( DAOPurchasedetail::updatePurchasedetail(
+                    $this -> purchasedetail["id_purchase"],
+$this -> purchasedetail["id_item_reference"],
+$this -> purchasedetail["quantity"],
+$this -> purchasedetail["unitary_price"]
+                    )
+                ) {
                     Site::redirectToWithMsg($this->listUrl, "Purchasedetail actualizada exitosamente.");
-                } else {
+                }else
+                {
                     Site::redirectToWithMsg($this->listUrl, "Hubo un error.");
                 }
                 break;
             case 'DEL':
-                if (DAOPurchasedetail::deletePurchasedetail(
+                if ( DAOPurchasedetail::deletePurchasedetail(
                     $this->purchasedetail["id_purchase"]
-                )) {
-                    Site::redirectToWithMsg($this->listUrl, "Purchasedetail eliminada exitosamente.");
-                } else {
-                    Site::redirectToWithMsg($this->listUrl, "Hubo un error.");
-                }
+                )
+            ) {
+                Site::redirectToWithMsg($this->listUrl, "Purchasedetail eliminada exitosamente.");
+            }else
+            {
+                Site::redirectToWithMsg($this->listUrl, "Hubo un error.");
+            }
                 break;
         }
     }
+      
 
-
-    private function prepareViewData()
-    {
-        $this->viewData["mode"] = $this->mode;
-        $this->viewData["purchasedetail"] = $this->purchasedetail;
-        if ($this->mode == "INS") {
-            $this->viewData["modedsc"] = $this->modes[$this->mode];
-        } else {
-            //$this->viewData["modedsc"] = sprintf(
-            // $this->modes[$this->mode], 
-            //);
-        }
-        //$this->viewData["purchasedetail"][$this->purchasedetail["status"]."_selected"] = 'selected';
-        foreach ($this->error as $key => $error) {
-            if ($error !== null) {
-                $this->viewData["purchasedetail"][$key] = $error;
+	 private function prepareViewData(){
+            $this->viewData["mode"] = $this->mode;
+            $this->viewData["purchasedetail"] = $this->purchasedetail;
+            if ($this->mode == "INS") {
+                $this->viewData["modedsc"] = $this->modes[$this->mode];
+            } else {
+                //$this->viewData["modedsc"] = sprintf(
+                   // $this->modes[$this->mode], 
+                //);
             }
+            //$this->viewData["purchasedetail"][$this->purchasedetail["status"]."_selected"] = 'selected';
+            foreach ($this->error as $key => $error) {
+                if ($error !== null) {
+                    $this->viewData["purchasedetail"][$key] = $error;
+                }
+            }
+            $this->viewData["readonly"] = in_array($this->mode, ["DSP","DEL"]) ? 'readonly': '';
+            $this->viewData["showConfirm"] = $this->mode !== "DSP"; 
+            $this->xss_token_purchasedetail = md5("purchasedetails_purchasedetail".date('Ymdhisu'));
+            $_SESSION["xss_token_purchasedetail"] = $this->xss_token_purchasedetail;
+            $this->viewData["xss_token_purchasedetail"] = $this->xss_token_purchasedetail; 
         }
-        $this->viewData["readonly"] = in_array($this->mode, ["DSP", "DEL"]) ? 'readonly' : '';
-        $this->viewData["showConfirm"] = $this->mode !== "DSP";
-        $this->xss_token_purchasedetail = md5("purchasedetails_purchasedetail" . date('Ymdhisu'));
-        $_SESSION["xss_token_purchasedetail"] = $this->xss_token_purchasedetail;
-        $this->viewData["xss_token_purchasedetail"] = $this->xss_token_purchasedetail;
-    }
+        
 
-
-    private function render()
-    {
-        Renderer::render("purchasedetails/purchasedetailform", $this->viewData);
-    }
+	private function render(){
+            Renderer::render("purchasedetails/purchasedetailform", $this->viewData);
+        }
 }
