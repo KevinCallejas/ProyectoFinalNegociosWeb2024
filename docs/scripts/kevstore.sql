@@ -6,7 +6,7 @@
 -- Tiempo de generación: 18-04-2024 a las 09:38:09
 -- Versión del servidor: 10.4.28-MariaDB
 -- Versión de PHP: 8.2.4
-
+use kevstore;
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
 SET time_zone = "+00:00";
